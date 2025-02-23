@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: SPRING PROJECT MAY 2024
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    username: "postgres"
+    password: "admin"
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+bot:
+  token: 7505475411:AAG-x5kN4pMom5hdwKEQsRruBtPzyjI6KpU
+  username: MyDemoCryptoBot
