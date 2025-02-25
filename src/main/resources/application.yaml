@@ -7,11 +7,11 @@ spring:
     password: "admin"
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: false
     properties:
       hibernate:
         format_sql: true
 bot:
-  token: 7505475411:AAG-x5kN4pMom5hdwKEQsRruBtPzyjI6KpU
+  token: 7505475411:AAFkEQ6UwdZ08n8Vl7TBJCS8Pu0siKC_aLM
   username: MyDemoCryptoBot

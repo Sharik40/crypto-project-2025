@@ -1,0 +1,22 @@
+{
+  "en": {
+    "start.message": "Hello! Choose your action:",
+    "info.message": "'ℹ' Bot's info...",
+    "language.message": "🌍 Choose your language:",
+    "price.message": "Write the desired cryptocurrency pair to get its price\n\n!!!IMPORTANT!!!\n\nYou must specify the pair according to its name on the exchanges (`BTCUSDT`, `SOLBTC`, etc.)\nThe letter case does not matter",
+    "back.kb": "Back",
+    "language.kb": "\uD83C\uDF0D Languages",
+    "price.kb": "\u20BF Show crypto price",
+    "info.kb": "ℹ Info"
+  },
+  "ua": {
+    "start.message": "Привіт! Оберіть дію:",
+    "info.message": "ℹ Інформація про бота...",
+    "language.message": "🌍 Оберіть мову:",
+    "price.message": "Напишіть бажану криптовалютну пару щоб дізнатися її ціну\n\n!!!ВАЖЛИВО!!!\n\nПотрібно вказати пару згідно її найменування на біржах (`BTCUSDT`, `SOLBTC`, і тд)\nРегістр букв не має значення",
+    "back.kb": "⬅ Назад",
+    "language.kb": "\uD83C\uDF0D Вибір мови",
+    "price.kb": "\u20BF Дізнатись ціну криптовалюти",
+    "info.kb": "ℹ Інформація"
+  }
+}

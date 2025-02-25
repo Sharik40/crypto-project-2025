@@ -1,4 +1,11 @@
 package org.spring.cp.cryptoproject2025.dto;
 
-public record PriceDTO() {
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+@Data
+public class PriceDTO {
+    private String symbol;
+    private BigDecimal price;
 }
