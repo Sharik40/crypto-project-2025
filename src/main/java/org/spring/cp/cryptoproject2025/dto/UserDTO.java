@@ -8,7 +8,9 @@ public record UserDTO (
 
          String userName,
 
-         String language
+         String language,
+
+         UserStates userState
 ){
 
 }

@@ -3,12 +3,13 @@ package org.spring.cp.cryptoproject2025.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.cp.cryptoproject2025.dto.UserDTO;
+import org.spring.cp.cryptoproject2025.dto.UserStates;
 import org.spring.cp.cryptoproject2025.entities.User;
 import org.spring.cp.cryptoproject2025.mappers.UserMapper;
 import org.spring.cp.cryptoproject2025.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +40,19 @@ public class UserService {
         if (user == null)
             return null;
         return user.getLanguage();
+    }
+
+    @Transactional
+    public void setUserState(Long chatId, UserStates state) {
+        User user = userRepository.findByChatId(chatId);
+        if (user != null) {
+            user.setUserState(state);
+            userRepository.save(user);
+        }
+    }
+
+    public UserStates getUserState(Long chatId) {
+        User user = userRepository.findByChatId(chatId);
+        return user != null ? user.getUserState() : UserStates.DEFAULT;
     }
 }

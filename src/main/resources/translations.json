@@ -7,7 +7,15 @@
     "back.kb": "Back",
     "language.kb": "\uD83C\uDF0D Languages",
     "price.kb": "\u20BF Show crypto price",
-    "info.kb": "ℹ Info"
+    "info.kb": "ℹ Info",
+    "favorite_main.kb": "Favorite",
+    "create_favorite.kb": "Add to favorite",
+    "get_favorite.kb": "Show favorite",
+    "favorite_main.message": "Here you can add a cryptocurrency to your favorites or view already selected pairs",
+    "create_favorite.message": "Enter a cryptocurrency pair to add it to your favorites\n\n!!!IMPORTANT!!!\n\nYou must specify the pair according to its name on the exchanges (`BTCUSDT`, `SOLBTC`, etc.)\nThe letter case does not matter",
+    "list_of_favorites.message": "List of selected cryptocurrency",
+    "add_success.message": " was added!",
+    "add_denied.message": "Cryptocurrency already added"
   },
   "ua": {
     "start.message": "Привіт! Оберіть дію:",
@@ -17,6 +25,14 @@
     "back.kb": "⬅ Назад",
     "language.kb": "\uD83C\uDF0D Вибір мови",
     "price.kb": "\u20BF Дізнатись ціну криптовалюти",
-    "info.kb": "ℹ Інформація"
+    "info.kb": "ℹ Інформація",
+    "favorite_main.kb": "Улюблені",
+    "create_favorite.kb": "Додати до улюблених",
+    "get_favorite.kb": "Мої обрані",
+    "favorite_main.message": "Тут ви можете додати криптовалюту до обраних або переглянути вже обрані пари",
+    "create_favorite.message": "Введіть криптовалютну пару щоб додати її до обраних\n\n!!!ВАЖЛИВО!!!\n\nПотрібно вказати пару згідно її найменування на біржах (`BTCUSDT`, `SOLBTC`, і тд)\nРегістр букв не має значення",
+    "list_of_favorites.message": "Список обраної криптовалюти",
+    "add_success.message": " успішно додано!",
+    "add_denied.message": "Така криптовалюта вже додана!"
   }
 }

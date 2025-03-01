@@ -7,4 +7,5 @@ import org.spring.cp.cryptoproject2025.entities.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     User toUser(UserDTO userDTO);
+    UserDTO toUserDTO(User user);
 }

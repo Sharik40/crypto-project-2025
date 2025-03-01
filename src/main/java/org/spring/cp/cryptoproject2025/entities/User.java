@@ -2,8 +2,9 @@ package org.spring.cp.cryptoproject2025.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.spring.cp.cryptoproject2025.dto.UserStates;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,4 +20,9 @@ public class User {
     private String userName;
 
     private String language;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Crypto> cryptos;
+
+    private UserStates userState;
 }
