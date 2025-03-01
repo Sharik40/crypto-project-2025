@@ -55,4 +55,17 @@ public class UserService {
         User user = userRepository.findByChatId(chatId);
         return user != null ? user.getUserState() : UserStates.DEFAULT;
     }
+
+    public void setTargetSymbol(Long chatId, String targetSymbol) {
+        User user = userRepository.findByChatId(chatId);
+        if (user != null) {
+            user.setTargetSymbol(targetSymbol);
+            userRepository.save(user);
+        }
+    }
+
+    public String getTargetSymbol(Long chatId) {
+        User user = userRepository.findByChatId(chatId);
+        return user != null ? user.getTargetSymbol() : null;
+    }
 }

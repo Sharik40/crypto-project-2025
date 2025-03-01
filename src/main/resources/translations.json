@@ -15,7 +15,14 @@
     "create_favorite.message": "Enter a cryptocurrency pair to add it to your favorites\n\n!!!IMPORTANT!!!\n\nYou must specify the pair according to its name on the exchanges (`BTCUSDT`, `SOLBTC`, etc.)\nThe letter case does not matter",
     "list_of_favorites.message": "List of selected cryptocurrency",
     "add_success.message": " was added!",
-    "add_denied.message": "Cryptocurrency already added"
+    "add_denied.message": "Cryptocurrency already added",
+    "set_price.kb": "Set price",
+    "price_response.message": "Current price for %s is: %s",
+    "crypto_of_favorites.message": "Choice option for %s",
+    "set_price_favorite.message": "Enter the desired price at which you would like to be notified\n\nThe current price for %s is: %s",
+    "enter_number.message": "Enter number",
+    "add_crypto_success.message": "Notification on %s successfully set",
+    "alert_success": "🚀 %s reached price %s"
   },
   "ua": {
     "start.message": "Привіт! Оберіть дію:",
@@ -33,6 +40,13 @@
     "create_favorite.message": "Введіть криптовалютну пару щоб додати її до обраних\n\n!!!ВАЖЛИВО!!!\n\nПотрібно вказати пару згідно її найменування на біржах (`BTCUSDT`, `SOLBTC`, і тд)\nРегістр букв не має значення",
     "list_of_favorites.message": "Список обраної криптовалюти",
     "add_success.message": " успішно додано!",
-    "add_denied.message": "Така криптовалюта вже додана!"
+    "add_denied.message": "Така криптовалюта вже додана!",
+    "set_price.kb": "Встановити бажану ціну",
+    "price_response.message": "Поточна ціна на %s становить: %s",
+    "crypto_of_favorites.message": "Оберіть бажану дію для %s",
+    "set_price_favorite.message": "Введіть бажану ціну при якій Вам надіслати сповіщення\n\nПоточна ціна на %s становить: %s",
+    "enter_number.message": "Введіть число",
+    "add_crypto_success.message": "Сповіщення на %s успішно встановлено",
+    "alert_success": "🚀 %s дійшов до ціни %s"
   }
 }

@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
@@ -22,6 +23,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class TelegramBot extends TelegramLongPollingBot {
 
     private String botName;
+
+    private String globalSymbol;
 
     private final String startText = "Привіт\n\nЦей бот може надати поточну ціну криптовалюти\n\nНадішліть боту `/price` та бажану криптовалютну пару у форматі `BTCUSDT`";
 
@@ -36,6 +39,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Autowired
     private TranslationService translationService;
+
+    @Autowired
+    private PriceAlertService priceAlertService;
 
     private final KeyboardService keyboardService;
 
@@ -61,21 +67,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                     .build();
             userService.saveUser(user);
 
-//            if (userState == UserStates.WAITING_FOR_CRYPTO) {
-//                if (cryptoService.addCrypto(message, Long.parseLong(chatId))) {
-//                    userService.setUserState(Long.parseLong(chatId), UserStates.DEFAULT);
-//                    sendMessage(chatId, "✅ " + message + translate("add_success.message", userService.getUserLanguage(Long.parseLong(chatId))), keyboardService.getFavoriteKeyboard(userService.getUserLanguage(Long.parseLong(chatId))));
-//                } else {
-//                    sendMessage(chatId, translate("add_denied.message", userService.getUserLanguage(Long.parseLong(chatId))), keyboardService.getFavoriteKeyboard(userService.getUserLanguage(Long.parseLong(chatId))));
-//                }
-//            } else {
-//                handleCommand(update);
-//            }
-
             switch (userState) {
                 case WAITING_FOR_PRICE:
-                    userService.setUserState(Long.parseLong(chatId), UserStates.DEFAULT);
-                    sendMessage(chatId, priceService.getPrice(message.toUpperCase()));
+                    String[] priceWithSymbol = priceService.getPriceWithSymbol(message.toUpperCase()).split(" ");
+                    String language = userService.getUserLanguage(Long.parseLong(chatId));
+                    sendMessage(chatId, String.format(translate("price_response.message", language), priceWithSymbol[0], priceWithSymbol[1]), keyboardService.backToMenu(language));
                     break;
                 case WAITING_FOR_CRYPTO:
                     if (cryptoService.addCrypto(message, Long.parseLong(chatId))) {
@@ -85,6 +81,19 @@ public class TelegramBot extends TelegramLongPollingBot {
                         sendMessage(chatId, translate("add_denied.message", userService.getUserLanguage(Long.parseLong(chatId))), keyboardService.getFavoriteKeyboard(userService.getUserLanguage(Long.parseLong(chatId))));
                     }
                     break;
+                case WAITING_FOR_TARGET_PRICE:
+                    String symbol = userService.getTargetSymbol(Long.parseLong(chatId));
+                    userService.setUserState(Long.parseLong(chatId), UserStates.DEFAULT);
+                    try {
+                        BigDecimal targetPrice = new BigDecimal(message);
+                        priceAlertService.addAlert(Long.parseLong(chatId), symbol, targetPrice);
+                        sendMessage(chatId, String.format(translate("add_crypto_success.message", userService.getUserLanguage(Long.parseLong(chatId))), symbol), keyboardService.backToMenu(userService.getUserLanguage(Long.parseLong(chatId))));
+                    } catch (NumberFormatException e) {
+                        log.error(e.getMessage());
+                        userService.setUserState(Long.parseLong(chatId), UserStates.WAITING_FOR_TARGET_PRICE);
+                        sendMessage(chatId, translate("enter_number.message", userService.getUserLanguage(Long.parseLong(chatId))), keyboardService.backToMenu(userService.getUserLanguage(Long.parseLong(chatId))));
+                    }
+
                 default:
                     handleCommand(update);
             }
@@ -129,7 +138,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 break;
             case "back_main":  // ⬅️ Обработка кнопки "Назад"
                 userService.setUserState(Long.parseLong(chatId), UserStates.DEFAULT);
-                editMessage(chatId, translate("start.message", userLanguge), keyboardService.getMainMenuKeyboard(userLanguge), messageId);
+                editMessage(chatId, translate("start.message", userLanguge), keyboardService.getMainMenuKeyboard(userLanguge, Long.parseLong(chatId)), messageId);
                 break;
             case "favorite_main":
                 editMessage(chatId, translate("favorite_main.message", userLanguge), keyboardService.getFavoriteKeyboard(userLanguge), messageId);
@@ -141,6 +150,22 @@ public class TelegramBot extends TelegramLongPollingBot {
             case "get_favorite":
                 editMessage(chatId, translate("list_of_favorites.message", userLanguge), keyboardService.getFavorite(userLanguge, cryptoService.getAllCryptos(Long.parseLong(chatId))), messageId);
                 break;
+            case "set_price_favorite":
+                userService.setUserState(Long.parseLong(chatId), UserStates.WAITING_FOR_TARGET_PRICE);
+                String price_set = priceService.getPrice(globalSymbol).toString();
+                editMessage(chatId, String.format(translate("set_price_favorite.message", userLanguge), globalSymbol, price_set), keyboardService.backToMenu(userLanguge), messageId);
+                break;
+            case "price_favorite":
+                String price = priceService.getPrice(globalSymbol).toString();
+                editMessage(chatId, String.format(translate("price_response.message", userLanguge), globalSymbol, price), keyboardService.backToMenu(userLanguge), messageId);
+                break;
+            default:
+                if (callbackData.startsWith("crypto_")) {
+                    String symbol = callbackData.substring("crypto_".length());
+                    userService.setTargetSymbol(Long.parseLong(chatId), symbol);
+                    globalSymbol = symbol;
+                    editMessage(chatId, String.format(translate("crypto_of_favorites.message", userLanguge), symbol), keyboardService.getCryptoOfFavorites(userLanguge), messageId);
+                }
         }
     }
 
@@ -151,7 +176,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         switch (text) {
             case "/start":
-                sendMessage(chatId, translate("start.message", userLanguge), keyboardService.getMainMenuKeyboard(userLanguge));
+                userService.setUserState(Long.parseLong(chatId), UserStates.DEFAULT);
+                sendMessage(chatId, translate("start.message", userLanguge), keyboardService.getMainMenuKeyboard(userLanguge, Long.parseLong(chatId)));
                 break;
             case "/price":
                 sendMessage(chatId, translate("price.message", userLanguge), keyboardService.getPriceKeyboard(userLanguge));

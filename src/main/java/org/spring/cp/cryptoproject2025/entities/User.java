@@ -25,4 +25,6 @@ public class User {
     private List<Crypto> cryptos;
 
     private UserStates userState;
+
+    private String targetSymbol;
 }

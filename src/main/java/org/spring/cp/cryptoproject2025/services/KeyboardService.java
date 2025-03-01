@@ -1,6 +1,7 @@
 package org.spring.cp.cryptoproject2025.services;
 
 import lombok.RequiredArgsConstructor;
+import org.spring.cp.cryptoproject2025.dto.UserStates;
 import org.spring.cp.cryptoproject2025.entities.Crypto;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -14,12 +15,13 @@ import java.util.List;
 public class KeyboardService {
 
     private final TranslationService translationService;
+    private final UserService userService;
 
     public String translate(String key, String language) {
         return translationService.getMessage(key, language);
     }
 
-    public InlineKeyboardMarkup getMainMenuKeyboard(String language) {
+    public InlineKeyboardMarkup getMainMenuKeyboard(String language, Long chatId) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
         List<InlineKeyboardButton> row1 = List.of(
@@ -34,6 +36,8 @@ public class KeyboardService {
 
         keyboard.add(row1);
         keyboard.add(row2);
+
+        userService.setUserState(chatId, UserStates.DEFAULT);
 
         return new InlineKeyboardMarkup(keyboard);
     }
@@ -136,6 +140,36 @@ public class KeyboardService {
         );
         keyboard.add(row2);
 
+        return new InlineKeyboardMarkup(keyboard);
+    }
+
+    public InlineKeyboardMarkup getCryptoOfFavorites(String language) {
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+
+        List<InlineKeyboardButton> row1 = List.of(
+                createButton(translate("price.kb", language), "price_favorite"),
+                createButton(translate("set_price.kb", language), "set_price_favorite")
+        );
+
+
+
+        List<InlineKeyboardButton> row2 = List.of(
+                createButton(translate("back.kb", language), "back_main")
+        );
+
+        keyboard.add(row1);
+        keyboard.add(row2);
+
+        return new InlineKeyboardMarkup(keyboard);
+    }
+
+    public InlineKeyboardMarkup backToMenu(String language) {
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        List<InlineKeyboardButton> row1 = List.of(
+                createButton(translate("back.kb", language), "back_main")
+        );
+
+        keyboard.add(row1);
         return new InlineKeyboardMarkup(keyboard);
     }
 }
